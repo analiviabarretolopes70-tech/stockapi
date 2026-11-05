@@ -13,13 +13,24 @@ export async function criar(produto) {
 
 //Função para listar todos os produtos
 export async function listar() {
-    const[rows] = await pool.query('SELECT *FROM produtos');
+    const[rows] = await pool.query(
+   `SELECT produtos.id, produtos.nome, produtos.descricao,
+    produtos.preco, produtos.quantidade_estoque, categorias.nome AS categoria
+    FROM produtos
+    INNER JOIN categorias 
+    ON produtos.categorias_id = categorias.id`);
     return rows;
 }
 
 //Função pra buscar um produto pelo ID 
 export async function buscarPorId(id) {
-    const[rows] = await pool.query('SELECT *FROM produtos WHERE id=?', [id]);
+    const[rows] = await pool.query(
+        `SELECT produtos.id, produtos.nome, produtos.descricao,
+    produtos.preco, produtos.quantidade_estoque, categorias.nome AS categoria
+    FROM produtos
+    INNER JOIN categorias 
+    ON produtos.categorias_id = categorias.id
+    WHERE produtos.id = ?`, [id]);
     return rows[0];
 }
 
